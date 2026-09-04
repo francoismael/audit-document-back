@@ -1,50 +1,23 @@
-package com.audit.audit_document.domain.entity;
-
-import javax.persistence.*;
+package com.audit.audit_document.application.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@Entity
-@Table(name = "mission")
-public class Mission {
+public class CreateMissionRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true, length = 100)
     private String numero;
-
-    @Column(nullable = false, length = 500)
     private String intitule;
-
-    @Column(columnDefinition = "TEXT")
     private String objet;
 
-    @Column(name = "date_debut")
     private LocalDate dateDebut;
-
-    @Column(name = "date_fin")
     private LocalDate dateFin;
-
-    @Column(name = "date_signature")
     private LocalDate dateSignature;
 
+    private Long structureId;
 
+    private List<MissionPersonneRequest> personnes;
 
-    @ManyToOne
-    @JoinColumn(name = "structure_id", nullable = false)
-    private Structure structure;
-
-    public Mission() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public CreateMissionRequest() {
     }
 
     public String getNumero() {
@@ -95,11 +68,19 @@ public class Mission {
         this.dateSignature = dateSignature;
     }
 
-    public Structure getStructure() {
-        return structure;
+    public Long getStructureId() {
+        return structureId;
     }
 
-    public void setStructure(Structure structure) {
-        this.structure = structure;
+    public void setStructureId(Long structureId) {
+        this.structureId = structureId;
+    }
+
+    public List<MissionPersonneRequest> getPersonnes() {
+        return personnes;
+    }
+
+    public void setPersonnes(List<MissionPersonneRequest> personnes) {
+        this.personnes = personnes;
     }
 }

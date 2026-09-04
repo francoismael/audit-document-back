@@ -37,4 +37,9 @@ public class MissionPersonneRepositoryAdapter
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public List<MissionPersonne> findByMissionId(Long missionId) {
+    return repository.findByMissionId(missionId);
+    }
 }

@@ -17,13 +17,12 @@ CREATE TABLE personne (
 
 CREATE TABLE mission (
     id BIGSERIAL PRIMARY KEY,
-    reference VARCHAR(100) NOT NULL UNIQUE,
+    numero VARCHAR(100) NOT NULL UNIQUE,
     intitule VARCHAR(500) NOT NULL,
     objet TEXT,
     date_debut DATE,
     date_fin DATE,
     date_signature DATE,
-    lieu VARCHAR(255),
 
     structure_id BIGINT NOT NULL,
 
@@ -53,3 +52,17 @@ CREATE TABLE mission_personne (
     CONSTRAINT uq_mission_personne_role
         UNIQUE (mission_id, personne_id, roles)
 );
+
+
+INSERT INTO structure (nom, descriptions)
+VALUES
+('Direction Générale des Finances', 'Structure chargée de la gestion financière'),
+('Direction des Ressources Humaines', 'Structure chargée de la gestion des ressources humaines');
+
+INSERT INTO personne (nom, prenom, matricule, fonction, services)
+VALUES
+('RAKOTO', 'Jean', 'MAT001', 'Chef de mission', 'Direction de l''Audit Interne'),
+('RABE', 'Marie', 'MAT002', 'Auditeur interne', 'Direction de l''Audit Interne'),
+('RANDRIA', 'Paul', 'MAT003', 'Superviseur', 'Direction de l''Audit Interne'),
+('RAZAFINDRAKOTO', 'Luc', 'MAT004', 'Auditeur interne', 'Direction de l''Audit Interne'),
+('ANDRIAMBOLOLONA', 'Sophie', 'MAT005', 'Directeur de l''Audit Interne', 'Direction de l''Audit Interne');

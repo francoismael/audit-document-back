@@ -1,42 +1,25 @@
-package com.audit.audit_document.domain.entity;
-
-import javax.persistence.*;
+package com.audit.audit_document.application.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@Entity
-@Table(name = "mission")
-public class Mission {
+public class MissionResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true, length = 100)
     private String numero;
-
-    @Column(nullable = false, length = 500)
     private String intitule;
-
-    @Column(columnDefinition = "TEXT")
     private String objet;
-
-    @Column(name = "date_debut")
     private LocalDate dateDebut;
-
-    @Column(name = "date_fin")
     private LocalDate dateFin;
-
-    @Column(name = "date_signature")
     private LocalDate dateSignature;
+    private String lieu;
 
+    private Long structureId;
+    private String structureNom;
 
+    private List<MissionPersonneResponse> personnes;
 
-    @ManyToOne
-    @JoinColumn(name = "structure_id", nullable = false)
-    private Structure structure;
-
-    public Mission() {
+    public MissionResponse() {
     }
 
     public Long getId() {
@@ -95,11 +78,35 @@ public class Mission {
         this.dateSignature = dateSignature;
     }
 
-    public Structure getStructure() {
-        return structure;
+    public String getLieu() {
+        return lieu;
     }
 
-    public void setStructure(Structure structure) {
-        this.structure = structure;
+    public void setLieu(String lieu) {
+        this.lieu = lieu;
+    }
+
+    public Long getStructureId() {
+        return structureId;
+    }
+
+    public void setStructureId(Long structureId) {
+        this.structureId = structureId;
+    }
+
+    public String getStructureNom() {
+        return structureNom;
+    }
+
+    public void setStructureNom(String structureNom) {
+        this.structureNom = structureNom;
+    }
+
+    public List<MissionPersonneResponse> getPersonnes() {
+        return personnes;
+    }
+
+    public void setPersonnes(List<MissionPersonneResponse> personnes) {
+        this.personnes = personnes;
     }
 }

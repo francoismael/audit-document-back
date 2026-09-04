@@ -14,7 +14,6 @@ CREATE TABLE mission (
     date_debut DATE,
     date_fin DATE,
     date_signature DATE,
-    lieu VARCHAR(255),
     structure_id BIGINT NOT NULL,
 
     CONSTRAINT fk_mission_structure
