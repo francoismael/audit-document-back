@@ -1,5 +1,5 @@
 package com.audit.audit_document.application.service;
-
+import org.springframework.transaction.annotation.Transactional;
 import com.audit.audit_document.application.dto.CreateMissionRequest;
 import com.audit.audit_document.application.dto.MissionPersonneRequest;
 import com.audit.audit_document.application.usecases.CreateMissionUseCase;
@@ -34,6 +34,7 @@ public class CreateMissionService implements CreateMissionUseCase {
     }
 
     @Override
+    @Transactional
     public Mission execute(CreateMissionRequest request) {
 
         // get stuctures
