@@ -2,7 +2,7 @@ package com.audit.audit_document.application.service;
 
 import com.audit.audit_document.application.dto.MissionPersonneResponse;
 import com.audit.audit_document.application.dto.MissionResponse;
-import com.audit.audit_document.application.usecases.GetMissionUseCase;
+import com.audit.audit_document.application.usecases.GetByIdMissionUseCase;
 import com.audit.audit_document.domain.entity.Mission;
 import com.audit.audit_document.domain.entity.MissionPersonne;
 import com.audit.audit_document.domain.repository.MissionPersonneRepository;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GetMissionService implements GetMissionUseCase {
+public class GetMissionService implements GetByIdMissionUseCase {
 
     private final MissionRepository missionRepository;
     private final MissionPersonneRepository missionPersonneRepository;

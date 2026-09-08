@@ -1,7 +1,7 @@
 package com.audit.audit_document.application.service;
 
 import com.audit.audit_document.application.dto.DeclarationIndependanceResponse;
-import com.audit.audit_document.application.usecases.GetDeclarationIndependanceUseCase;
+import com.audit.audit_document.application.usecases.GetByIdDeclarationIndependanceUseCase;
 import com.audit.audit_document.domain.entity.DeclarationIndependance;
 import com.audit.audit_document.domain.entity.Mission;
 import com.audit.audit_document.domain.entity.Personne;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GetDeclarationIndependanceService
-        implements GetDeclarationIndependanceUseCase {
+        implements GetByIdDeclarationIndependanceUseCase {
 
     private final DeclarationIndependanceRepository declarationRepository;
 

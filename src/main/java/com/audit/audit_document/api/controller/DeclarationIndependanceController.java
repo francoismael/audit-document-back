@@ -5,7 +5,7 @@ import com.audit.audit_document.application.dto.DeclarationIndependanceResponse;
 import com.audit.audit_document.application.usecases.CreateDeclarationIndependanceUseCase;
 import com.audit.audit_document.application.usecases.DeleteDeclarationIndependanceUseCase;
 import com.audit.audit_document.application.usecases.GetAllDeclarationIndependanceUseCase;
-import com.audit.audit_document.application.usecases.GetDeclarationIndependanceUseCase;
+import com.audit.audit_document.application.usecases.GetByIdDeclarationIndependanceUseCase;
 import com.audit.audit_document.application.usecases.UpdateDeclarationIndependanceUseCase;
 
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class DeclarationIndependanceController {
 
     private final CreateDeclarationIndependanceUseCase createUseCase;
-    private final GetDeclarationIndependanceUseCase getUseCase;
+    private final GetByIdDeclarationIndependanceUseCase getUseCase;
     private final UpdateDeclarationIndependanceUseCase updateUseCase;
     private final DeleteDeclarationIndependanceUseCase deleteUseCase;
     private final GetAllDeclarationIndependanceUseCase getAllUseCase;
@@ -25,7 +25,7 @@ public class DeclarationIndependanceController {
     public DeclarationIndependanceController(
             CreateDeclarationIndependanceUseCase createUseCase,
             UpdateDeclarationIndependanceUseCase updateUseCase,
-            GetDeclarationIndependanceUseCase getUseCase,
+            GetByIdDeclarationIndependanceUseCase getUseCase,
             DeleteDeclarationIndependanceUseCase deleteUseCase,
             GetAllDeclarationIndependanceUseCase getAllUseCase) {
 
