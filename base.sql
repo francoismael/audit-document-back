@@ -306,9 +306,6 @@ CREATE TABLE declaration_independance (
 
     date_declaration DATE NOT NULL,
 
-    declaration_conflit TEXT,
-
-    observation TEXT,
 
     CONSTRAINT fk_declaration_mission
         FOREIGN KEY (mission_id)

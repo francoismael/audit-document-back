@@ -29,11 +29,6 @@ public class DeclarationIndependance {
     @Column(name = "date_declaration", nullable = false)
     private LocalDate dateDeclaration;
 
-    @Column(name = "declaration_conflit", columnDefinition = "TEXT")
-    private String declarationConflit;
-
-    @Column(name = "observation", columnDefinition = "TEXT")
-    private String observation;
 
 
     public DeclarationIndependance(){
@@ -68,21 +63,6 @@ public class DeclarationIndependance {
         this.dateDeclaration = dateDeclaration;
     }
 
-    public String getDeclarationConflit(){
-        return declarationConflit;
-    }
 
-    public void setDeclarationConflit(String declarationConflit){
-        this.declarationConflit = declarationConflit;
-    }
-
-    public String getObservation(){
-        return observation;
-    }
-
-    public void setObservation(String observation){
-        this.observation = observation;
-    }
-    
 
 }
