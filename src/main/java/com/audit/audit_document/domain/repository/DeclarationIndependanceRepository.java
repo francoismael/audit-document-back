@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface DeclarationIndependanceRepository {
     DeclarationIndependance save(DeclarationIndependance declaration);
     Optional<DeclarationIndependance> findById(Long id);
-    List<DeclarationIndependance> findByMissionId(Long missionId);
-    List<DeclarationIndependance> findByPersonneId(Long personneId);
+    List<DeclarationIndependance> findAll();
+    DeclarationIndependance update(DeclarationIndependance declaration);
     void deleteById(Long id);
 }

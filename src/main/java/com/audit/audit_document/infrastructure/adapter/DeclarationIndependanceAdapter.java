@@ -10,36 +10,39 @@ import com.audit.audit_document.domain.repository.DeclarationIndependanceReposit
 import com.audit.audit_document.infrastructure.jpa.DeclarationIndependanceJpa;
 
 @Repository
-public class DeclarationIndependanceAdapter implements DeclarationIndependanceRepository {
+public class DeclarationIndependanceAdapter
+        implements DeclarationIndependanceRepository {
+
     private final DeclarationIndependanceJpa declarationIndependanceJpa;
 
-    public DeclarationIndependanceAdapter( DeclarationIndependanceJpa declarationIndependanceJpa) {
+    public DeclarationIndependanceAdapter(
+            DeclarationIndependanceJpa declarationIndependanceJpa) {
         this.declarationIndependanceJpa = declarationIndependanceJpa;
     }
 
-    @Override 
-    public DeclarationIndependance save(DeclarationIndependance declaration){
+    @Override
+    public DeclarationIndependance save(DeclarationIndependance declaration) {
         return declarationIndependanceJpa.save(declaration);
     }
 
-    @Override 
-    public Optional<DeclarationIndependance> findById(Long id){
+    @Override
+    public Optional<DeclarationIndependance> findById(Long id) {
         return declarationIndependanceJpa.findById(id);
     }
 
-    @Override 
-    public List<DeclarationIndependance> findByMissionId(Long missionId){
-        return declarationIndependanceJpa.findByMissionId(missionId);
+    @Override
+    public List<DeclarationIndependance> findAll() {
+        return declarationIndependanceJpa.findAll();
     }
 
-    @Override 
-    public List<DeclarationIndependance> findByPersonneId(Long personneId){
-        return declarationIndependanceJpa.findByPersonneId(personneId);
+    @Override
+    public DeclarationIndependance update(
+            DeclarationIndependance declaration) {
+        return declarationIndependanceJpa.save(declaration);
     }
 
-
-    @Override 
-    public void deleteById(Long id){
+    @Override
+    public void deleteById(Long id) {
         declarationIndependanceJpa.deleteById(id);
     }
 }
