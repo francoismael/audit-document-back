@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class GetMissionService implements GetByIdMissionUseCase {
+public class GetByIdMissionService implements GetByIdMissionUseCase {
 
     private final MissionRepository missionRepository;
     private final MissionPersonneRepository missionPersonneRepository;
 
-    public GetMissionService(
+    public GetByIdMissionService(
             MissionRepository missionRepository,
             MissionPersonneRepository missionPersonneRepository) {
 

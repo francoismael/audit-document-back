@@ -3,8 +3,12 @@ package com.audit.audit_document.api.controller;
 import com.audit.audit_document.application.dto.CreateMissionRequest;
 import com.audit.audit_document.application.dto.MissionResponse;
 import com.audit.audit_document.application.usecases.CreateMissionUseCase;
+import com.audit.audit_document.application.usecases.GetAllMissionUseCase;
 import com.audit.audit_document.application.usecases.GetByIdMissionUseCase;
 import com.audit.audit_document.domain.entity.Mission;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +19,16 @@ public class MissionController {
 
     private final CreateMissionUseCase createMissionUseCase;
     private final GetByIdMissionUseCase getMissionUseCase;
+    private final GetAllMissionUseCase getAllMissionUseCase;
 
     public MissionController(
             CreateMissionUseCase createMissionUseCase,
+             GetAllMissionUseCase getAllMissionUseCase,
             GetByIdMissionUseCase getMissionUseCase) {
 
         this.createMissionUseCase = createMissionUseCase;
         this.getMissionUseCase = getMissionUseCase;
+        this.getAllMissionUseCase = getAllMissionUseCase;
     }
 
     @PostMapping
@@ -43,4 +50,13 @@ public class MissionController {
 
         return ResponseEntity.ok(mission);
     }
+
+    @GetMapping
+    public ResponseEntity<List<MissionResponse>> getAll() {
+
+    List<MissionResponse> missions =
+            getAllMissionUseCase.execute();
+
+    return ResponseEntity.ok(missions);
+}
 }

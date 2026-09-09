@@ -12,7 +12,6 @@ public class MissionResponse {
     private LocalDate dateDebut;
     private LocalDate dateFin;
     private LocalDate dateSignature;
-    private String lieu;
 
     private Long structureId;
     private String structureNom;
@@ -78,13 +77,6 @@ public class MissionResponse {
         this.dateSignature = dateSignature;
     }
 
-    public String getLieu() {
-        return lieu;
-    }
-
-    public void setLieu(String lieu) {
-        this.lieu = lieu;
-    }
 
     public Long getStructureId() {
         return structureId;
