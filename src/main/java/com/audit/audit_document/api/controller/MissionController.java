@@ -3,6 +3,7 @@ package com.audit.audit_document.api.controller;
 import com.audit.audit_document.application.dto.CreateMissionRequest;
 import com.audit.audit_document.application.dto.MissionResponse;
 import com.audit.audit_document.application.usecases.CreateMissionUseCase;
+import com.audit.audit_document.application.usecases.DeleteMissionUseCase;
 import com.audit.audit_document.application.usecases.GetAllMissionUseCase;
 import com.audit.audit_document.application.usecases.GetByIdMissionUseCase;
 import com.audit.audit_document.application.usecases.UpdateMissionUseCase;
@@ -21,11 +22,13 @@ public class MissionController {
     private final CreateMissionUseCase createMissionUseCase;
     private final GetByIdMissionUseCase getMissionUseCase;
     private final UpdateMissionUseCase updateMissionUseCase;
+    private final DeleteMissionUseCase deleteMissionUseCase;
     private final GetAllMissionUseCase getAllMissionUseCase;
 
     public MissionController(
             CreateMissionUseCase createMissionUseCase,
              GetAllMissionUseCase getAllMissionUseCase,
+             DeleteMissionUseCase deleteMissionUseCase,
              UpdateMissionUseCase updateMissionUseCase,
             GetByIdMissionUseCase getMissionUseCase) {
 
@@ -33,6 +36,7 @@ public class MissionController {
         this.getMissionUseCase = getMissionUseCase;
         this.getAllMissionUseCase = getAllMissionUseCase;
         this.updateMissionUseCase = updateMissionUseCase;
+        this.deleteMissionUseCase = deleteMissionUseCase;
     }
 
     @PostMapping
@@ -73,5 +77,14 @@ public class MissionController {
             updateMissionUseCase.execute(id, request);
 
     return ResponseEntity.ok(mission);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+        @PathVariable Long id) {
+
+    deleteMissionUseCase.execute(id);
+
+    return ResponseEntity.noContent().build();
     }
 }
