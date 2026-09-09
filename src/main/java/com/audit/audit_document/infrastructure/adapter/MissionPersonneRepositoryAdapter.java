@@ -1,4 +1,4 @@
-package com.audit.audit_document.infrastructure.repository;
+package com.audit.audit_document.infrastructure.adapter;
 import com.audit.audit_document.infrastructure.jpa.MissionPersonneJpa;
 import com.audit.audit_document.domain.entity.MissionPersonne;
 import com.audit.audit_document.domain.repository.MissionPersonneRepository;
@@ -41,5 +41,11 @@ public class MissionPersonneRepositoryAdapter
     @Override
     public List<MissionPersonne> findByMissionId(Long missionId) {
     return repository.findByMissionId(missionId);
+    }
+
+    @Override
+    public void deleteByMissionId(Long missionId) {
+    repository.deleteByMissionId(missionId);
+    repository.flush();
     }
 }

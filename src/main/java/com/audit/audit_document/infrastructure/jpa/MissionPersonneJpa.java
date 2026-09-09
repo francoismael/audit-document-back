@@ -9,4 +9,5 @@ public interface MissionPersonneJpa
         extends JpaRepository<MissionPersonne, Long> {
 
     List<MissionPersonne> findByMissionId(Long missionId);
+    void deleteByMissionId(Long missionId);
 }
