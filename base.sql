@@ -52,6 +52,104 @@ CREATE TABLE mission_personne (
 );
 
 
+/* cancerne une personne dans la cadre de la mission */
+CREATE TABLE declaration_independance (
+    id BIGSERIAL PRIMARY KEY,
+
+    mission_id BIGINT NOT NULL,
+
+    personne_id BIGINT NOT NULL,
+
+    date_declaration DATE NOT NULL,
+
+
+    CONSTRAINT fk_declaration_mission
+        FOREIGN KEY (mission_id)
+        REFERENCES mission(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_declaration_personne
+        FOREIGN KEY (personne_id)
+        REFERENCES personne(id),
+
+    CONSTRAINT uq_declaration
+        UNIQUE (mission_id, personne_id)
+);
+
+
+
+/* une mission peut avoir plusieurs fiches d'interview */
+CREATE TABLE interview (
+    id BIGSERIAL PRIMARY KEY,
+
+    mission_id BIGINT NOT NULL,
+
+    personne_interviewee_id BIGINT NOT NULL,
+
+    reference VARCHAR(50) NOT NULL,
+
+    date_interview DATE NOT NULL,
+
+    fonction VARCHAR(255),
+
+    anciennete VARCHAR(100),
+
+    redige_par_personne_id BIGINT,
+
+    supervise_par_personne_id BIGINT,
+
+    valide_par_personne_id BIGINT,
+
+    CONSTRAINT fk_interview_mission
+        FOREIGN KEY (mission_id)
+        REFERENCES mission(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_interview_personne_interviewee
+        FOREIGN KEY (personne_interviewee_id)
+        REFERENCES personne(id),
+
+    CONSTRAINT fk_interview_redige_par
+        FOREIGN KEY (redige_par_personne_id)
+        REFERENCES personne(id),
+
+    CONSTRAINT fk_interview_supervise_par
+        FOREIGN KEY (supervise_par_personne_id)
+        REFERENCES personne(id),
+
+    CONSTRAINT fk_interview_valide_par
+        FOREIGN KEY (valide_par_personne_id)
+        REFERENCES personne(id),
+
+    CONSTRAINT uq_interview_reference
+        UNIQUE (reference)
+);
+
+
+CREATE TABLE interview_question (
+    id BIGSERIAL PRIMARY KEY,
+
+    interview_id BIGINT NOT NULL,
+
+    numero INTEGER NOT NULL,
+
+    question TEXT NOT NULL,
+
+    reponse TEXT,
+
+    CONSTRAINT fk_interview_question_interview
+        FOREIGN KEY (interview_id)
+        REFERENCES interview(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT uq_interview_question_numero
+        UNIQUE (interview_id, numero)
+);
+
+
+
+
+
 /* le TDR  appartient a une mission */
 CREATE TABLE tdr (
     id SERIAL PRIMARY KEY,
@@ -295,32 +393,6 @@ CREATE TABLE reponse (
 );
 
 
-
-/* cancerne une personne dans la cadre de la mission */
-CREATE TABLE declaration_independance (
-    id BIGSERIAL PRIMARY KEY,
-
-    mission_id BIGINT NOT NULL,
-
-    personne_id BIGINT NOT NULL,
-
-    date_declaration DATE NOT NULL,
-
-
-    CONSTRAINT fk_declaration_mission
-        FOREIGN KEY (mission_id)
-        REFERENCES mission(id)
-        ON DELETE CASCADE,
-
-    CONSTRAINT fk_declaration_personne
-        FOREIGN KEY (personne_id)
-        REFERENCES personne(id),
-
-    CONSTRAINT uq_declaration
-        UNIQUE (mission_id, personne_id)
-);
-
-
 /* pour gerer le réunio de cloture et ouverture */
 CREATE TABLE reunion (
     id BIGSERIAL PRIMARY KEY,
@@ -370,40 +442,6 @@ CREATE TABLE reunion_personne (
         FOREIGN KEY (personne_id)
         REFERENCES personne(id)
 );
-
-
-/* une mission peut avoir plusieurs fiches d'interview */
-CREATE TABLE interview (
-    id BIGSERIAL PRIMARY KEY,
-
-    mission_id BIGINT NOT NULL,
-
-    personne_interviewee_id BIGINT,
-
-    reference VARCHAR(100),
-
-    date_interview DATE,
-
-    fonction VARCHAR(255),
-
-    anciennete VARCHAR(100),
-
-    visa TEXT,
-
-    CONSTRAINT fk_interview_mission
-        FOREIGN KEY (mission_id)
-        REFERENCES mission(id)
-        ON DELETE CASCADE,
-
-    CONSTRAINT fk_interview_personne
-        FOREIGN KEY (personne_interviewee_id)
-        REFERENCES personne(id)
-);
-
-
-
-
-
 
 
 

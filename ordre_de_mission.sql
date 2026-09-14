@@ -76,6 +76,74 @@ CREATE TABLE declaration_independance (
         UNIQUE (mission_id, personne_id)
 );
 
+
+CREATE TABLE interview (
+    id BIGSERIAL PRIMARY KEY,
+
+    mission_id BIGINT NOT NULL,
+
+    personne_interviewee_id BIGINT NOT NULL,
+
+    reference VARCHAR(50) NOT NULL,
+
+    date_interview DATE NOT NULL,
+
+    fonction VARCHAR(255),
+
+    anciennete VARCHAR(100),
+
+    redige_par_personne_id BIGINT,
+
+    supervise_par_personne_id BIGINT,
+
+    valide_par_personne_id BIGINT,
+
+    CONSTRAINT fk_interview_mission
+        FOREIGN KEY (mission_id)
+        REFERENCES mission(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_interview_personne_interviewee
+        FOREIGN KEY (personne_interviewee_id)
+        REFERENCES personne(id),
+
+    CONSTRAINT fk_interview_redige_par
+        FOREIGN KEY (redige_par_personne_id)
+        REFERENCES personne(id),
+
+    CONSTRAINT fk_interview_supervise_par
+        FOREIGN KEY (supervise_par_personne_id)
+        REFERENCES personne(id),
+
+    CONSTRAINT fk_interview_valide_par
+        FOREIGN KEY (valide_par_personne_id)
+        REFERENCES personne(id),
+
+    CONSTRAINT uq_interview_reference
+        UNIQUE (reference)
+);
+
+
+CREATE TABLE interview_question (
+    id BIGSERIAL PRIMARY KEY,
+
+    interview_id BIGINT NOT NULL,
+
+    numero INTEGER NOT NULL,
+
+    question TEXT NOT NULL,
+
+    reponse TEXT,
+
+    CONSTRAINT fk_interview_question_interview
+        FOREIGN KEY (interview_id)
+        REFERENCES interview(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT uq_interview_question_numero
+        UNIQUE (interview_id, numero)
+);
+
 INSERT INTO structure (nom, descriptions)
 VALUES
 ('Direction Générale des Finances', 'Structure chargée de la gestion financière'),
