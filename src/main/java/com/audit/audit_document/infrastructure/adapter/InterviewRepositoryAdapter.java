@@ -36,4 +36,9 @@ public class InterviewRepositoryAdapter implements InterviewRepository {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public long getNextReferenceNumber() {
+    return repository.getNextReferenceNumber();
+    }
 }

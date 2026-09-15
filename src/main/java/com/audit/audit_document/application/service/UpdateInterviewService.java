@@ -100,7 +100,6 @@ public class UpdateInterviewService implements UpdateInterviewUseCase {
         // Update interview information
         interview.setMission(mission);
         interview.setPersonneInterviewee(personneInterviewee);
-        interview.setReference(request.getReference());
         interview.setDateInterview(request.getDateInterview());
         interview.setFonction(request.getFonction());
         interview.setAnciennete(request.getAnciennete());

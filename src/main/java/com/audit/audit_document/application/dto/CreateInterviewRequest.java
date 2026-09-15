@@ -9,8 +9,6 @@ public class CreateInterviewRequest {
 
     private Long personneIntervieweeId;
 
-    private String reference;
-
     private LocalDate dateInterview;
 
     private String fonction;
@@ -44,13 +42,6 @@ public class CreateInterviewRequest {
         this.personneIntervieweeId = personneIntervieweeId;
     }
 
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
 
     public LocalDate getDateInterview() {
         return dateInterview;

@@ -48,17 +48,19 @@ public class CreateInterviewService implements CreateInterviewUseCase {
         Personne personneInterviewee =
                 personneRepository.findById(request.getPersonneIntervieweeId())
                         .orElseThrow(() ->
-                                new RuntimeException("Personne interviewée introuvable"));
+                                new RuntimeException(
+                                        "Personne interviewée introuvable"));
 
         // Find the person who wrote the interview
         Personne redigeParPersonne = null;
 
         if (request.getRedigeParPersonneId() != null) {
             redigeParPersonne =
-                    personneRepository.findById(request.getRedigeParPersonneId())
-                            .orElseThrow(() ->
-                                    new RuntimeException(
-                                            "Personne qui a rédigé l'interview introuvable"));
+                    personneRepository.findById(
+                            request.getRedigeParPersonneId()
+                    ).orElseThrow(() ->
+                            new RuntimeException(
+                                    "Personne qui a rédigé l'interview introuvable"));
         }
 
         // Find the supervisor
@@ -66,9 +68,11 @@ public class CreateInterviewService implements CreateInterviewUseCase {
 
         if (request.getSuperviseParPersonneId() != null) {
             superviseParPersonne =
-                    personneRepository.findById(request.getSuperviseParPersonneId())
-                            .orElseThrow(() ->
-                                    new RuntimeException("Superviseur introuvable"));
+                    personneRepository.findById(
+                            request.getSuperviseParPersonneId()
+                    ).orElseThrow(() ->
+                            new RuntimeException(
+                                    "Superviseur introuvable"));
         }
 
         // Find the validator
@@ -76,9 +80,11 @@ public class CreateInterviewService implements CreateInterviewUseCase {
 
         if (request.getValideParPersonneId() != null) {
             valideParPersonne =
-                    personneRepository.findById(request.getValideParPersonneId())
-                            .orElseThrow(() ->
-                                    new RuntimeException("Validateur introuvable"));
+                    personneRepository.findById(
+                            request.getValideParPersonneId()
+                    ).orElseThrow(() ->
+                            new RuntimeException(
+                                    "Validateur introuvable"));
         }
 
         // Create the interview
@@ -86,7 +92,13 @@ public class CreateInterviewService implements CreateInterviewUseCase {
 
         interview.setMission(mission);
         interview.setPersonneInterviewee(personneInterviewee);
-        interview.setReference(request.getReference());
+
+        // Generate the interview reference automatically
+        long number = interviewRepository.getNextReferenceNumber();
+        String reference = String.format("FI-%03d", number);
+
+        interview.setReference(reference);
+
         interview.setDateInterview(request.getDateInterview());
         interview.setFonction(request.getFonction());
         interview.setAnciennete(request.getAnciennete());
@@ -112,6 +124,12 @@ public class CreateInterviewService implements CreateInterviewUseCase {
         }
 
         // Save interview and questions
+        System.out.println("========== CREATE INTERVIEW ==========");
+System.out.println("ID AVANT SAVE       = " + interview.getId());
+System.out.println("REFERENCE           = " + interview.getReference());
+System.out.println("MISSION ID          = " + interview.getMission().getId());
+System.out.println("PERSONNE INTERVIEW  = " + interview.getPersonneInterviewee().getId());
+System.out.println("======================================");
         Interview savedInterview = interviewRepository.save(interview);
 
         // Convert entity to response DTO
@@ -126,23 +144,37 @@ public class CreateInterviewService implements CreateInterviewUseCase {
 
         // Mission
         if (interview.getMission() != null) {
-            response.setMissionId(interview.getMission().getId());
-            response.setMissionNumero(interview.getMission().getNumero());
-            response.setMissionIntitule(interview.getMission().getIntitule());
+
+            response.setMissionId(
+                    interview.getMission().getId()
+            );
+
+            response.setMissionNumero(
+                    interview.getMission().getNumero()
+            );
+
+            response.setMissionIntitule(
+                    interview.getMission().getIntitule()
+            );
         }
 
         // Interviewed person
         if (interview.getPersonneInterviewee() != null) {
+
             response.setPersonneIntervieweeId(
-                    interview.getPersonneInterviewee().getId());
+                    interview.getPersonneInterviewee().getId()
+            );
 
             response.setPersonneIntervieweeNom(
-                    interview.getPersonneInterviewee().getNom());
+                    interview.getPersonneInterviewee().getNom()
+            );
 
             response.setPersonneIntervieweePrenom(
-                    interview.getPersonneInterviewee().getPrenom());
+                    interview.getPersonneInterviewee().getPrenom()
+            );
         }
 
+        // Interview information
         response.setReference(interview.getReference());
         response.setDateInterview(interview.getDateInterview());
         response.setFonction(interview.getFonction());
@@ -150,38 +182,50 @@ public class CreateInterviewService implements CreateInterviewUseCase {
 
         // Writer
         if (interview.getRedigeParPersonne() != null) {
+
             response.setRedigeParPersonneId(
-                    interview.getRedigeParPersonne().getId());
+                    interview.getRedigeParPersonne().getId()
+            );
 
             response.setRedigeParPersonneNom(
-                    interview.getRedigeParPersonne().getNom());
+                    interview.getRedigeParPersonne().getNom()
+            );
 
             response.setRedigeParPersonnePrenom(
-                    interview.getRedigeParPersonne().getPrenom());
+                    interview.getRedigeParPersonne().getPrenom()
+            );
         }
 
         // Supervisor
         if (interview.getSuperviseParPersonne() != null) {
+
             response.setSuperviseParPersonneId(
-                    interview.getSuperviseParPersonne().getId());
+                    interview.getSuperviseParPersonne().getId()
+            );
 
             response.setSuperviseParPersonneNom(
-                    interview.getSuperviseParPersonne().getNom());
+                    interview.getSuperviseParPersonne().getNom()
+            );
 
             response.setSuperviseParPersonnePrenom(
-                    interview.getSuperviseParPersonne().getPrenom());
+                    interview.getSuperviseParPersonne().getPrenom()
+            );
         }
 
         // Validator
         if (interview.getValideParPersonne() != null) {
+
             response.setValideParPersonneId(
-                    interview.getValideParPersonne().getId());
+                    interview.getValideParPersonne().getId()
+            );
 
             response.setValideParPersonneNom(
-                    interview.getValideParPersonne().getNom());
+                    interview.getValideParPersonne().getNom()
+            );
 
             response.setValideParPersonnePrenom(
-                    interview.getValideParPersonne().getPrenom());
+                    interview.getValideParPersonne().getPrenom()
+            );
         }
 
         // Questions

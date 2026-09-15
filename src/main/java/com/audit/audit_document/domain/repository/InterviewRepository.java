@@ -14,4 +14,6 @@ public interface InterviewRepository {
     List<Interview> findAll();
 
     void deleteById(Long id);
+
+    long getNextReferenceNumber();
 }
