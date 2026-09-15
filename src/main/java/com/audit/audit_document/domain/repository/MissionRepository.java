@@ -14,4 +14,6 @@ public interface MissionRepository {
     List<Mission> findAll();
 
     void deleteById(Long id);
+
+    long getNextNumero();
 }

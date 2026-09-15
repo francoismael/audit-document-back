@@ -64,7 +64,6 @@ public class UpdateMissionService implements UpdateMissionUseCase {
                         ));
 
         // update mission information
-        mission.setNumero(request.getNumero());
         mission.setIntitule(request.getIntitule());
         mission.setObjet(request.getObjet());
         mission.setDateDebut(request.getDateDebut());

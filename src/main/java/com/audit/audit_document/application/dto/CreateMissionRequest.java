@@ -5,7 +5,6 @@ import java.util.List;
 
 public class CreateMissionRequest {
 
-    private String numero;
     private String intitule;
     private String objet;
 
@@ -18,14 +17,6 @@ public class CreateMissionRequest {
     private List<MissionPersonneRequest> personnes;
 
     public CreateMissionRequest() {
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
     }
 
     public String getIntitule() {

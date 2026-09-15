@@ -17,6 +17,10 @@ CREATE TABLE personne (
 );
 
 
+
+CREATE SEQUENCE mission_numero_seq
+START WITH 1
+INCREMENT BY 1;
 CREATE TABLE mission (
     id BIGSERIAL PRIMARY KEY,
     numero VARCHAR(100) NOT NULL UNIQUE,
@@ -76,6 +80,9 @@ CREATE TABLE declaration_independance (
         UNIQUE (mission_id, personne_id)
 );
 
+CREATE SEQUENCE interview_reference_seq
+START WITH 1
+INCREMENT BY 1;
 
 CREATE TABLE interview (
     id BIGSERIAL PRIMARY KEY,

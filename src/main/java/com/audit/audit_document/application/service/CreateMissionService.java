@@ -1,5 +1,7 @@
 package com.audit.audit_document.application.service;
+
 import org.springframework.transaction.annotation.Transactional;
+
 import com.audit.audit_document.application.dto.CreateMissionRequest;
 import com.audit.audit_document.application.dto.MissionPersonneRequest;
 import com.audit.audit_document.application.usecases.CreateMissionUseCase;
@@ -11,6 +13,7 @@ import com.audit.audit_document.domain.repository.MissionPersonneRepository;
 import com.audit.audit_document.domain.repository.MissionRepository;
 import com.audit.audit_document.domain.repository.PersonneRepository;
 import com.audit.audit_document.domain.repository.StructureRepository;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,16 +40,21 @@ public class CreateMissionService implements CreateMissionUseCase {
     @Transactional
     public Mission execute(CreateMissionRequest request) {
 
-        // get stuctures
+        // Find the structure
         Structure structure = structureRepository
                 .findById(request.getStructureId())
                 .orElseThrow(() ->
                         new RuntimeException("Structure introuvable"));
 
-        // create mission
+        // Create mission
         Mission mission = new Mission();
 
-        mission.setNumero(request.getNumero());
+        // Generate mission number automatically
+        long number = missionRepository.getNextNumero();
+        String numero = String.format("%03d", number);
+
+        mission.setNumero(numero);
+
         mission.setIntitule(request.getIntitule());
         mission.setObjet(request.getObjet());
         mission.setDateDebut(request.getDateDebut());
@@ -56,7 +64,7 @@ public class CreateMissionService implements CreateMissionUseCase {
 
         Mission missionSaved = missionRepository.save(mission);
 
-        // add person affect in mission
+        // Add people assigned to the mission
         if (request.getPersonnes() != null) {
 
             for (MissionPersonneRequest personneRequest
@@ -67,7 +75,7 @@ public class CreateMissionService implements CreateMissionUseCase {
                         .orElseThrow(() ->
                                 new RuntimeException(
                                         "Personne introuvable : "
-                                                + personneRequest.getPersonneId()));
+                                        + personneRequest.getPersonneId()));
 
                 MissionPersonne missionPersonne =
                         new MissionPersonne();

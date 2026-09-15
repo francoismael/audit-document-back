@@ -1,4 +1,4 @@
-package com.audit.audit_document.infrastructure.repository;
+package com.audit.audit_document.infrastructure.adapter;
 
 import com.audit.audit_document.domain.entity.Mission;
 import com.audit.audit_document.domain.repository.MissionRepository;
@@ -34,5 +34,10 @@ public class MissionRepositoryAdapter implements MissionRepository {
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public long getNextNumero() {
+    return repository.getNextNumero();
     }
 }
