@@ -151,6 +151,65 @@ CREATE TABLE interview_question (
         UNIQUE (interview_id, numero)
 );
 
+CREATE TABLE reunion (
+    id BIGSERIAL PRIMARY KEY,
+
+    mission_id BIGINT NOT NULL,
+
+    type VARCHAR(30) NOT NULL,
+
+    date_reunion DATE NOT NULL,
+
+    heure_debut TIME,
+
+    heure_fin TIME,
+
+    lieu VARCHAR(255),
+
+    observations TEXT,
+
+    points_dai_introduction TEXT,
+
+    points_dai_presentation_mission TEXT,
+
+    points_dai_methodologie TEXT,
+
+    points_interlocuteurs_introduction TEXT,
+
+    points_interlocuteurs_processus TEXT,
+
+    points_interlocuteurs_organisation TEXT,
+
+    CONSTRAINT fk_reunion_mission
+        FOREIGN KEY (mission_id)
+        REFERENCES mission(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT chk_reunion_type
+        CHECK (type IN ('OUVERTURE', 'CLOTURE'))
+);
+
+CREATE TABLE reunion_personne (
+    id BIGSERIAL PRIMARY KEY,
+
+    reunion_id BIGINT NOT NULL,
+
+    personne_id BIGINT NOT NULL,
+
+    role VARCHAR(150),
+
+    type_participant VARCHAR(100),
+
+    CONSTRAINT fk_rp_reunion
+        FOREIGN KEY (reunion_id)
+        REFERENCES reunion(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_rp_personne
+        FOREIGN KEY (personne_id)
+        REFERENCES personne(id)
+);
+
 INSERT INTO structure (nom, descriptions)
 VALUES
 ('Direction Générale des Finances', 'Structure chargée de la gestion financière'),

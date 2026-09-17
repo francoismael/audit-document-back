@@ -411,6 +411,18 @@ CREATE TABLE reunion (
 
     observations TEXT,
 
+    points_dai_introduction TEXT,
+
+    points_dai_presentation_mission TEXT,
+
+    points_dai_methodologie TEXT,
+
+    points_interlocuteurs_introduction TEXT,
+
+    points_interlocuteurs_processus TEXT,
+
+    points_interlocuteurs_organisation TEXT,
+
     CONSTRAINT fk_reunion_mission
         FOREIGN KEY (mission_id)
         REFERENCES mission(id)
@@ -418,7 +430,7 @@ CREATE TABLE reunion (
 
     CONSTRAINT chk_reunion_type
         CHECK (type IN ('OUVERTURE', 'CLOTURE'))
-); 
+);
 
 
 /* représente les participant */
