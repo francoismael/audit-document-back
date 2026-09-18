@@ -180,7 +180,6 @@ CREATE TABLE tdr (
         ON DELETE CASCADE
 );
 
-
 /* Objectif defini dans TDR */
 CREATE TABLE objectif (
     id BIGSERIAL PRIMARY KEY,
