@@ -161,24 +161,25 @@ CREATE TABLE reunion (
     date_reunion DATE NOT NULL,
 
     heure_debut TIME,
-
     heure_fin TIME,
-
+    heure_levee TIME,
     lieu VARCHAR(255),
-
     observations TEXT,
-
     points_dai_introduction TEXT,
-
     points_dai_presentation_mission TEXT,
-
     points_dai_methodologie TEXT,
-
     points_interlocuteurs_introduction TEXT,
-
     points_interlocuteurs_processus TEXT,
-
     points_interlocuteurs_organisation TEXT,
+
+
+    remerciements TEXT,
+    rappel_perimetre TEXT,
+    synthese_constats TEXT,
+    points_forts_identifies TEXT,
+    resume_resultats_verification TEXT,
+    resume_recommandations_plans_actions TEXT,
+    observations_commentaires TEXT,
 
     CONSTRAINT fk_reunion_mission
         FOREIGN KEY (mission_id)
