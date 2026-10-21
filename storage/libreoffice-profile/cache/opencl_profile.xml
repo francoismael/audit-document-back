@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile>
+ <version>LibreOffice v1</version>
+ <device>
+  <type>opencl</type>
+  <name>NVIDIA GeForce GTX 965M</name>
+  <driver>472.19</driver>
+  <time>69712</time>
+  <errors>false</errors>
+ </device>
+ <device>
+  <type>opencl</type>
+  <name>Intel(R) HD Graphics 530</name>
+  <driver>31.0.101.2111</driver>
+  <time>32720</time>
+  <errors>false</errors>
+ </device>
+ <device>
+  <type>native</type>
+  <time>3992064</time>
+  <errors>false</errors>
+ </device>
+</profile>
