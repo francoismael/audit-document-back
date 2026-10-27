@@ -40,6 +40,9 @@ public class GetAllInterviewsService implements GetAllInterviewsUseCase {
             response.setDateInterview(interview.getDateInterview());
             response.setFonction(interview.getFonction());
             response.setAnciennete(interview.getAnciennete());
+            response.setDateRedaction(interview.getDateRedaction());
+            response.setDateSupervision(interview.getDateSupervision());
+            response.setDateValidation(interview.getDateValidation());
 
             // Mission
             if (interview.getMission() != null) {
