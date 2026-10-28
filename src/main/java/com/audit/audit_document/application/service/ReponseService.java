@@ -232,9 +232,24 @@ public class ReponseService implements
                                 )
                         );
 
+        Recommandation recommandation =
+                reponse.getRecommandation();
+
         reponseRepository.deleteById(
                 reponse.getId()
         );
+
+        /*
+         * The maintenance decision needs a response:
+         * without any response left, it is cleared.
+         */
+        if (reponseRepository
+                .findByRecommandationId(recommandation.getId())
+                .isEmpty()) {
+
+            recommandation.setMaintenue(null);
+            recommandationRepository.save(recommandation);
+        }
     }
 
     // =========================================================

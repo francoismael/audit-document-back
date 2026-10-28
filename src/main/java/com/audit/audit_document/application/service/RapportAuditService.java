@@ -265,9 +265,16 @@ public class RapportAuditService
             );
         }
 
+        // Without an objet, the title of the mission is used.
+        String sujet =
+                mission.getObjet() != null
+                        && !mission.getObjet().trim().isEmpty()
+                        ? mission.getObjet()
+                        : mission.getIntitule();
+
         response.setTitre(
                 "RAPPORT D’AUDIT SUR "
-                        + mission.getObjet()
+                        + sujet
         );
 
         response.setMotifs(
