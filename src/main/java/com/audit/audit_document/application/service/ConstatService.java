@@ -83,14 +83,14 @@ public class ConstatService implements
 
         /*
          * Automatic reference generation.
-         * Example: CST001, CST002, CST003...
+         * Example: CST-001, CST-002, CST-003...
          */
         Long number =
                 constatRepository.getNextReference();
 
         String reference =
                 String.format(
-                        "CST%03d",
+                        "CST-%03d",
                         number
                 );
 

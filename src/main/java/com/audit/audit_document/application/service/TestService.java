@@ -107,7 +107,7 @@ public class TestService implements
 
         /*
          * Automatic test reference.
-         * Example: FT001, FT002, FT003...
+         * Example: FT-001, FT-002, FT-003...
          */
         test.setReference(
                 testRepository.getNextReference()

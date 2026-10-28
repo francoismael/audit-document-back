@@ -1,11 +1,8 @@
-CREATE DATABASE audit_document;
-
 CREATE TABLE structure (
     id BIGSERIAL PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     descriptions TEXT
 );
-
 
 CREATE TABLE personne (
     id BIGSERIAL PRIMARY KEY,
@@ -16,14 +13,9 @@ CREATE TABLE personne (
     services VARCHAR(255)
 );
 
-
-
-CREATE SEQUENCE mission_numero_seq
-START WITH 1
-INCREMENT BY 1;
 CREATE TABLE mission (
     id BIGSERIAL PRIMARY KEY,
-    numero VARCHAR(100) NOT NULL UNIQUE,
+    numero VARCHAR(100) NOT NULL,
     intitule VARCHAR(500) NOT NULL,
     objet TEXT,
     date_debut DATE,
@@ -31,11 +23,13 @@ CREATE TABLE mission (
     date_signature DATE,
     structure_id BIGINT NOT NULL,
 
+    CONSTRAINT uq_mission_numero
+        UNIQUE (numero),
+
     CONSTRAINT fk_mission_structure
         FOREIGN KEY (structure_id)
         REFERENCES structure(id)
 );
-
 
 CREATE TABLE mission_personne (
     id BIGSERIAL PRIMARY KEY,
@@ -80,10 +74,6 @@ CREATE TABLE declaration_independance (
         UNIQUE (mission_id, personne_id)
 );
 
-CREATE SEQUENCE interview_reference_seq
-START WITH 1
-INCREMENT BY 1;
-
 CREATE TABLE interview (
     id BIGSERIAL PRIMARY KEY,
 
@@ -104,6 +94,12 @@ CREATE TABLE interview (
     supervise_par_personne_id BIGINT,
 
     valide_par_personne_id BIGINT,
+
+    date_redaction DATE,
+
+    date_supervision DATE,
+
+    date_validation DATE,
 
     CONSTRAINT fk_interview_mission
         FOREIGN KEY (mission_id)
@@ -129,7 +125,6 @@ CREATE TABLE interview (
     CONSTRAINT uq_interview_reference
         UNIQUE (reference)
 );
-
 
 CREATE TABLE interview_question (
     id BIGSERIAL PRIMARY KEY,
@@ -164,6 +159,7 @@ CREATE TABLE reunion (
     heure_fin TIME,
     heure_levee TIME,
     lieu VARCHAR(255),
+
     observations TEXT,
     points_dai_introduction TEXT,
     points_dai_presentation_mission TEXT,
@@ -171,7 +167,6 @@ CREATE TABLE reunion (
     points_interlocuteurs_introduction TEXT,
     points_interlocuteurs_processus TEXT,
     points_interlocuteurs_organisation TEXT,
-
 
     remerciements TEXT,
     rappel_perimetre TEXT,
@@ -187,7 +182,10 @@ CREATE TABLE reunion (
         ON DELETE CASCADE,
 
     CONSTRAINT chk_reunion_type
-        CHECK (type IN ('OUVERTURE', 'CLOTURE'))
+        CHECK (type IN ('OUVERTURE', 'CLOTURE')),
+
+    CONSTRAINT uq_reunion_mission_type
+        UNIQUE (mission_id, type)
 );
 
 CREATE TABLE reunion_personne (
@@ -211,11 +209,10 @@ CREATE TABLE reunion_personne (
         REFERENCES personne(id)
 );
 
-/* le TDR  appartient a une mission */
 CREATE TABLE tdr (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
 
-    mission_id BIGINT NOT NULL UNIQUE,
+    mission_id BIGINT NOT NULL,
 
     objet TEXT,
 
@@ -235,13 +232,17 @@ CREATE TABLE tdr (
 
     livrables TEXT,
 
+    date_tdr DATE,
+
+    CONSTRAINT uq_tdr_mission
+        UNIQUE (mission_id),
+
     CONSTRAINT fk_tdr_mission
         FOREIGN KEY (mission_id)
         REFERENCES mission(id)
         ON DELETE CASCADE
 );
 
-/* Objectif defini dans TDR */
 CREATE TABLE objectif (
     id BIGSERIAL PRIMARY KEY,
 
@@ -260,33 +261,19 @@ CREATE TABLE objectif (
         UNIQUE (tdr_id, numero)
 );
 
-
-/*
-   Une mission possède un seul programme de travail
- */
-
 CREATE TABLE programme_travail (
     id BIGSERIAL PRIMARY KEY,
 
-    mission_id BIGINT NOT NULL UNIQUE,
+    mission_id BIGINT NOT NULL,
+
+    CONSTRAINT uq_programme_mission
+        UNIQUE (mission_id),
 
     CONSTRAINT fk_programme_mission
         FOREIGN KEY (mission_id)
         REFERENCES mission(id)
         ON DELETE CASCADE
 );
-
-
-/*
-    SEQUENCE POUR LES NUMEROS DE CONTROLE */
-
-CREATE SEQUENCE ligne_programme_controle_seq
-START WITH 1
-INCREMENT BY 1;
-
-
-/*  LIGNES DU PROGRAMME DE TRAVAIL
-*/
 
 CREATE TABLE ligne_programme (
     id BIGSERIAL PRIMARY KEY,
@@ -327,17 +314,8 @@ CREATE TABLE ligne_programme (
     CONSTRAINT fk_ligne_objectif
         FOREIGN KEY (objectif_id)
         REFERENCES objectif(id)
+        DEFERRABLE INITIALLY DEFERRED
 );
-
-
-
-CREATE SEQUENCE test_reference_seq
-START WITH 1
-INCREMENT BY 1;
-
-CREATE SEQUENCE echantillon_reference_seq
-START WITH 1
-INCREMENT BY 1;
 
 CREATE TABLE test (
     id BIGSERIAL PRIMARY KEY,
@@ -381,28 +359,29 @@ CREATE TABLE test (
 
     CONSTRAINT fk_test_auditeur
         FOREIGN KEY (auditeur_mission_personne_id)
-        REFERENCES mission_personne(id),
+        REFERENCES mission_personne(id)
+        DEFERRABLE INITIALLY DEFERRED,
 
     CONSTRAINT fk_test_chef_mission
         FOREIGN KEY (chef_mission_mission_personne_id)
-        REFERENCES mission_personne(id),
+        REFERENCES mission_personne(id)
+        DEFERRABLE INITIALLY DEFERRED,
 
     CONSTRAINT fk_test_superviseur
         FOREIGN KEY (superviseur_mission_personne_id)
-        REFERENCES mission_personne(id),
+        REFERENCES mission_personne(id)
+        DEFERRABLE INITIALLY DEFERRED,
 
     CONSTRAINT chk_resultat_test
         CHECK (
             resultat_test IS NULL
             OR resultat_test IN (
                 'EFFECTIF',
-                'INEFFECTIF',
-                'PAS_ECHANTILLON',
-                'NON_IMPLETE'
+                'PARTIELLEMENT_EFFECTIF',
+                'INEFFECTIF'
             )
         )
 );
-
 
 CREATE TABLE echantillon (
     id BIGSERIAL PRIMARY KEY,
@@ -486,10 +465,6 @@ CREATE TABLE consequence (
         ON DELETE CASCADE
 );
 
-CREATE SEQUENCE constat_reference_seq
-START WITH 1
-INCREMENT BY 1;
-
 CREATE TABLE recommandation (
     id BIGSERIAL PRIMARY KEY,
 
@@ -497,6 +472,9 @@ CREATE TABLE recommandation (
 
     description TEXT NOT NULL,
 
+    retenue BOOLEAN NOT NULL DEFAULT FALSE,
+
+    maintenue BOOLEAN,
 
     CONSTRAINT fk_recommandation_constat
         FOREIGN KEY (constat_id)
@@ -504,20 +482,17 @@ CREATE TABLE recommandation (
         ON DELETE CASCADE
 );
 
-ALTER TABLE recommandation
-ADD COLUMN retenue BOOLEAN NOT NULL DEFAULT FALSE;
-
-ALTER TABLE recommandation
-ADD COLUMN maintenue BOOLEAN;
-
 CREATE UNIQUE INDEX uq_recommandation_retenue_par_constat
 ON recommandation (constat_id)
 WHERE retenue = TRUE;
 
 CREATE TABLE reponse (
     id BIGSERIAL PRIMARY KEY,
+
     recommandation_id BIGINT NOT NULL,
+
     descriptions TEXT NOT NULL,
+
     date_reponse DATE,
 
     CONSTRAINT fk_reponse_recommandation
@@ -529,13 +504,16 @@ CREATE TABLE reponse (
 CREATE TABLE pv_affirmation (
     id BIGSERIAL PRIMARY KEY,
 
-    mission_id BIGINT NOT NULL UNIQUE,
+    mission_id BIGINT NOT NULL,
 
     date_entretien DATE NOT NULL,
 
     lieu VARCHAR(255),
 
     observations_complementaires TEXT,
+
+    CONSTRAINT uq_pv_affirmation_mission
+        UNIQUE (mission_id),
 
     CONSTRAINT fk_pv_affirmation_mission
         FOREIGN KEY (mission_id)
@@ -563,12 +541,7 @@ CREATE TABLE pv_affirmation_participant (
         ON DELETE CASCADE,
 
     CONSTRAINT chk_pv_participant_type
-        CHECK (
-            type_participant IN (
-                'AUDITEUR',
-                'ENTITE_AUDITEE'
-            )
-        )
+        CHECK (type_participant IN ('AUDITEUR', 'ENTITE_AUDITEE'))
 );
 
 CREATE TABLE pv_affirmation_ligne (
@@ -596,14 +569,42 @@ CREATE TABLE pv_affirmation_ligne (
         REFERENCES constat(id)
         ON DELETE CASCADE,
 
-    CONSTRAINT uq_pv_ligne_constat
+    CONSTRAINT uq_pv_affirmation_constat
         UNIQUE (pv_affirmation_id, constat_id)
+);
+
+CREATE TABLE rapport_audit (
+    id BIGSERIAL PRIMARY KEY,
+
+    mission_id BIGINT NOT NULL,
+
+    motifs TEXT,
+
+    nature VARCHAR(255),
+
+    version_rapport VARCHAR(50) NOT NULL DEFAULT 'definitif',
+
+    date_emission DATE,
+
+    proprietaire_document VARCHAR(255),
+
+    destinataires TEXT,
+
+    classification VARCHAR(255),
+
+    CONSTRAINT uq_rapport_audit_mission
+        UNIQUE (mission_id),
+
+    CONSTRAINT fk_rapport_mission
+        FOREIGN KEY (mission_id)
+        REFERENCES mission(id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE document_type (
     id BIGSERIAL PRIMARY KEY,
 
-    code VARCHAR(100) NOT NULL UNIQUE,
+    code VARCHAR(100) NOT NULL,
 
     nom VARCHAR(255) NOT NULL,
 
@@ -611,9 +612,11 @@ CREATE TABLE document_type (
 
     actif BOOLEAN NOT NULL DEFAULT TRUE,
 
-    date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+    date_creation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
+    CONSTRAINT uq_document_type_code
+        UNIQUE (code)
+);
 
 CREATE TABLE document_template (
     id BIGSERIAL PRIMARY KEY,
@@ -622,7 +625,7 @@ CREATE TABLE document_template (
 
     nom_fichier_original VARCHAR(255) NOT NULL,
 
-    nom_fichier_stockage VARCHAR(255) NOT NULL UNIQUE,
+    nom_fichier_stockage VARCHAR(255) NOT NULL,
 
     chemin_fichier VARCHAR(500) NOT NULL,
 
@@ -635,6 +638,9 @@ CREATE TABLE document_template (
     actif BOOLEAN NOT NULL DEFAULT TRUE,
 
     date_upload TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uq_document_template_stockage
+        UNIQUE (nom_fichier_stockage),
 
     CONSTRAINT fk_document_template_type
         FOREIGN KEY (document_type_id)
@@ -666,15 +672,36 @@ CREATE TABLE document_field (
         UNIQUE (document_type_id, nom),
 
     CONSTRAINT chk_document_field_type
-        CHECK (
-            type IN (
-                'TEXT',
-                'TEXTAREA',
-                'DATE',
-                'NUMBER',
-                'BOOLEAN'
-            )
-        )
+        CHECK (type IN ('TEXT', 'TEXTAREA', 'DATE', 'NUMBER', 'BOOLEAN'))
+);
+
+CREATE TABLE document_genere (
+    id BIGSERIAL PRIMARY KEY,
+
+    document_type_id BIGINT NOT NULL,
+
+    mission_id BIGINT,
+
+    nom_fichier VARCHAR(255) NOT NULL,
+
+    chemin_fichier VARCHAR(500) NOT NULL,
+
+    taille BIGINT NOT NULL,
+
+    template_version INTEGER,
+
+    valeurs TEXT,
+
+    date_generation TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_document_genere_type
+        FOREIGN KEY (document_type_id)
+        REFERENCES document_type(id),
+
+    CONSTRAINT fk_document_genere_mission
+        FOREIGN KEY (mission_id)
+        REFERENCES mission(id)
+        ON DELETE SET NULL
 );
 
 INSERT INTO structure (nom, descriptions)
@@ -691,5 +718,3 @@ VALUES
 ('ANDRIAMBOLOLONA', 'Sophie', 'MAT005', 'Directeur de l''Audit Interne', 'Direction de l''Audit Interne'),
 ('RAKOTOARISOA', 'Nadia', 'MAT006', 'Chef de mission', 'Direction de l''Audit Interne'),
 ('RABEMANANA', 'Hery', 'MAT007', 'Superviseur', 'Direction de l''Audit Interne');
-
-
