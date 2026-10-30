@@ -8,7 +8,7 @@ Backend Spring Boot de l'application de génération de documents d'audit intern
 
 - Spring Boot 2.7, **Java 8** (pas de `var`, de `record` ni de `List.of`), JPA/Hibernate (`javax.persistence`), PostgreSQL.
 - Apache POI (`poi-ooxml`) pour lire et remplir les modèles Word (`.docx`).
-- **LibreOffice** (mode headless) pour convertir le document rempli en PDF : il doit être installé sur la machine qui exécute le backend. Le chemin de `soffice` se règle avec `app.pdf.soffice-path` dans `application.properties`.
+- Conversion du document rempli en PDF : moteur choisi par `app.pdf.engine` dans `application.properties`. `word` (par défaut ici) : **Microsoft Word** piloté par PowerShell, rendu exactement identique à Word ; Windows et Word doivent être installés sur la machine du backend. `libreoffice` : LibreOffice en mode headless (`app.pdf.soffice-path`), fonctionne partout mais le rendu peut différer un peu de Word (polices, images, justification).
 - Le schéma de la base est mis à jour par `spring.jpa.hibernate.ddl-auto=update`.
 
 ## Commandes (PowerShell)
@@ -29,14 +29,14 @@ domain/repository/       interfaces de repository du domaine
 infrastructure/jpa/      interfaces Spring Data JPA
 infrastructure/adapter/  implémentations des repositories du domaine
 infrastructure/config/   configuration (CORS global)
-infrastructure/pdf/      conversion DOCX → PDF avec LibreOffice (LibreOfficePdfConverter)
+infrastructure/pdf/      conversion DOCX → PDF : WordPdfConverter ou LibreOfficePdfConverter (PdfConversion : partie commune)
 ```
 
 - Un contrôleur dépend uniquement des interfaces de `usecases/`. Un service dépend uniquement des interfaces de `domain/repository/`, jamais directement de `infrastructure/jpa/`.
 - Le CORS est global (`CorsConfig`) : ne pas ajouter `@CrossOrigin` sur les contrôleurs.
 - Les fichiers (modèles et documents générés) se lisent et s'écrivent uniquement via `DocumentStorage`, jamais avec le chemin absolu enregistré en base.
 - Les modèles Word utilisent la syntaxe `{{nomDuChamp}}`. Le nom du champ doit correspondre à `DocumentField.nom`.
-- La génération produit un **PDF** : le modèle `.docx` est rempli avec POI, puis converti par `PdfConverter`. Les conversions sont faites une par une (LibreOffice ne supporte pas deux conversions en parallèle avec le même profil). Compter environ 15 s au premier appel, puis 3 à 6 s.
+- La génération produit un **PDF** : le modèle `.docx` est rempli avec POI, puis converti par `PdfConverter` (Word ou LibreOffice). Les conversions sont faites une par une. Avec Word : environ 8 s au premier appel, puis 6 s.
 - Les documents de l'historique générés avant le passage au PDF sont des `.docx` : `GeneratedDocument.contentTypeOf()` donne le bon type au téléchargement.
 - Les rôles de mission sont fixes (`MissionRole`) : `DIRECTEUR_AUDIT_INTERNE`, `CHEF_MISSION`, `SUPERVISEUR`, `AUDITEUR`, `POINT_FOCAL`.
 

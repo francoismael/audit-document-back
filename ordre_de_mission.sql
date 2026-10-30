@@ -678,7 +678,11 @@ CREATE TABLE document_field (
 CREATE TABLE document_genere (
     id BIGSERIAL PRIMARY KEY,
 
-    document_type_id BIGINT NOT NULL,
+    document_type_id BIGINT,
+
+    document_type_code VARCHAR(100),
+
+    document_type_nom VARCHAR(255),
 
     mission_id BIGINT,
 
