@@ -45,7 +45,8 @@ public class DocumentGenereService
     @Transactional(readOnly = true)
     public List<DocumentGenereResponse> getAll(
             Long documentTypeId,
-            Long missionId) {
+            Long missionId,
+            String query) {
 
         List<DocumentGenere> documents;
 
@@ -68,8 +69,19 @@ public class DocumentGenereService
                             || (document.getMission() != null
                                     && missionId.equals(document.getMission().getId()));
 
-            if (missionMatches) {
-                responses.add(mapper.toResponse(document));
+            if (!missionMatches) {
+                continue;
+            }
+
+            DocumentGenereResponse response = mapper.toResponse(document);
+
+            if (SearchText.matches(query,
+                    response.getNomFichier(),
+                    response.getDocumentTypeNom(),
+                    response.getMissionNumero(),
+                    response.getMissionIntitule())) {
+
+                responses.add(response);
             }
         }
 

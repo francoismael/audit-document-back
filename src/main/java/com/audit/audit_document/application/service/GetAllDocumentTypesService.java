@@ -24,15 +24,17 @@ public class GetAllDocumentTypesService
 
     @Override
     @Transactional(readOnly = true)
-    public List<DocumentTypeResponse> execute() {
-
-        List<DocumentType> types =
-                repository.findAll();
+    public List<DocumentTypeResponse> execute(String query, Boolean actif) {
 
         List<DocumentTypeResponse> responses =
                 new ArrayList<>();
 
-        for (DocumentType type : types) {
+        for (DocumentType type : repository.findAll()) {
+
+            if ((actif != null && !actif.equals(type.getActif()))
+                    || !SearchText.matches(query, type.getNom(), type.getCode(), type.getDescription())) {
+                continue;
+            }
 
             DocumentTypeResponse response =
                     new DocumentTypeResponse();

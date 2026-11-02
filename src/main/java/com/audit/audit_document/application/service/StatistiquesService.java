@@ -8,6 +8,7 @@ import com.audit.audit_document.application.usecases.GetStatistiquesUseCase;
 import com.audit.audit_document.domain.entity.DocumentGenere;
 import com.audit.audit_document.domain.entity.DocumentType;
 import com.audit.audit_document.domain.entity.Mission;
+import com.audit.audit_document.domain.entity.MissionStatus;
 import com.audit.audit_document.domain.repository.DocumentGenereRepository;
 import com.audit.audit_document.domain.repository.DocumentTypeRepository;
 import com.audit.audit_document.domain.repository.MissionRepository;
@@ -78,20 +79,22 @@ public class StatistiquesService implements GetStatistiquesUseCase {
 
         for (Mission mission : missions) {
 
-            LocalDate start = mission.getDateDebut();
-            LocalDate end = mission.getDateFin();
+            switch (MissionStatus.of(mission, today)) {
 
-            if (end != null && end.isBefore(today)) {
-                finished++;
+                case TERMINEE:
+                    finished++;
+                    break;
 
-            } else if (start != null && start.isAfter(today)) {
-                upcoming++;
+                case A_VENIR:
+                    upcoming++;
+                    break;
 
-            } else if (start != null) {
-                ongoing++;
+                case EN_COURS:
+                    ongoing++;
+                    break;
 
-            } else {
-                withoutDates++;
+                default:
+                    withoutDates++;
             }
         }
 

@@ -5,12 +5,15 @@ import com.audit.audit_document.application.dto.MissionResponse;
 import com.audit.audit_document.application.usecases.GetAllMissionUseCase;
 import com.audit.audit_document.domain.entity.Mission;
 import com.audit.audit_document.domain.entity.MissionPersonne;
+import com.audit.audit_document.domain.entity.MissionStatus;
 import com.audit.audit_document.domain.repository.MissionPersonneRepository;
 import com.audit.audit_document.domain.repository.MissionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class GetAllMissionService implements GetAllMissionUseCase {
@@ -27,14 +30,22 @@ public class GetAllMissionService implements GetAllMissionUseCase {
     }
 
     @Override
-    public List<MissionResponse> execute() {
+    public List<MissionResponse> execute(String query, String statut) {
 
-        // find all mission
-        List<Mission> missions = missionRepository.findAll();
+        MissionStatus wantedStatus = parseStatut(statut);
+        LocalDate today = LocalDate.now();
 
         List<MissionResponse> responses = new ArrayList<>();
 
-        for (Mission mission : missions) {
+        for (Mission mission : missionRepository.findAll()) {
+
+            String structureNom =
+                    mission.getStructure() != null ? mission.getStructure().getNom() : null;
+
+            if (!SearchText.matches(query, mission.getNumero(), mission.getIntitule(), structureNom)
+                    || (wantedStatus != null && MissionStatus.of(mission, today) != wantedStatus)) {
+                continue;
+            }
 
             MissionResponse response = new MissionResponse();
 
@@ -110,5 +121,22 @@ public class GetAllMissionService implements GetAllMissionUseCase {
         }
 
         return responses;
+    }
+
+    private MissionStatus parseStatut(String statut) {
+
+        if (statut == null || statut.trim().isEmpty()) {
+            return null;
+        }
+
+        try {
+            return MissionStatus.valueOf(statut.trim().toUpperCase(Locale.ROOT));
+
+        } catch (IllegalArgumentException e) {
+
+            throw new IllegalArgumentException(
+                    "Statut de mission inconnu : " + statut
+                            + ". Valeurs possibles : A_VENIR, EN_COURS, TERMINEE, SANS_DATES.");
+        }
     }
 }
