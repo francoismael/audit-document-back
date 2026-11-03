@@ -97,14 +97,15 @@ public class DocumentTypeController {
                 .body(response);
     }
 
-    // GET /api/document-types?q=ordre&actif=true (both optional).
+    // GET /api/document-types?q=ordre&actif=true&genere=false (all optional).
     @GetMapping
     public ResponseEntity<List<DocumentTypeResponse>>
             getAll(@RequestParam(required = false) String q,
-                   @RequestParam(required = false) Boolean actif) {
+                   @RequestParam(required = false) Boolean actif,
+                   @RequestParam(required = false) Boolean genere) {
 
         return ResponseEntity.ok(
-                getAllDocumentTypesUseCase.execute(q, actif));
+                getAllDocumentTypesUseCase.execute(q, actif, genere));
     }
 
     @PutMapping("/{documentTypeId}")

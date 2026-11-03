@@ -708,6 +708,19 @@ CREATE TABLE document_genere (
         ON DELETE SET NULL
 );
 
+CREATE TABLE ordre_section_document (
+    id BIGSERIAL PRIMARY KEY,
+
+    document_code VARCHAR(50) NOT NULL,
+
+    section_code VARCHAR(50) NOT NULL,
+
+    position INTEGER NOT NULL,
+
+    CONSTRAINT uq_ordre_section_document
+        UNIQUE (document_code, section_code)
+);
+
 INSERT INTO structure (nom, descriptions)
 VALUES
 ('Direction Générale des Finances', 'Structure chargée de la gestion financière'),
