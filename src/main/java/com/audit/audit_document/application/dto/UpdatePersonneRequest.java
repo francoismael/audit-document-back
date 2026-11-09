@@ -1,5 +1,7 @@
 package com.audit.audit_document.application.dto;
 
+import com.audit.audit_document.domain.entity.Sexe;
+
 public class UpdatePersonneRequest {
 
     private String nom;
@@ -7,6 +9,7 @@ public class UpdatePersonneRequest {
     private String matricule;
     private String fonction;
     private String services;
+    private Sexe sexe;
 
     public UpdatePersonneRequest() {
     }
@@ -49,5 +52,13 @@ public class UpdatePersonneRequest {
 
     public void setServices(String services) {
         this.services = services;
+    }
+
+    public Sexe getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(Sexe sexe) {
+        this.sexe = sexe;
     }
 }

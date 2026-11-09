@@ -10,7 +10,11 @@ CREATE TABLE personne (
     prenom VARCHAR(150) NOT NULL,
     matricule VARCHAR(100),
     fonction VARCHAR(255),
-    services VARCHAR(255)
+    services VARCHAR(255),
+    sexe VARCHAR(10) NOT NULL,
+
+    CONSTRAINT chk_personne_sexe
+        CHECK (sexe IN ('MASCULIN', 'FEMININ'))
 );
 
 CREATE TABLE mission (
@@ -726,12 +730,12 @@ VALUES
 ('Direction Générale des Finances', 'Structure chargée de la gestion financière'),
 ('Direction des Ressources Humaines', 'Structure chargée de la gestion des ressources humaines');
 
-INSERT INTO personne (nom, prenom, matricule, fonction, services)
+INSERT INTO personne (nom, prenom, matricule, fonction, services, sexe)
 VALUES
-('RAKOTO', 'Jean', 'MAT001', 'Chef de mission', 'Direction de l''Audit Interne'),
-('RABE', 'Marie', 'MAT002', 'Auditeur interne', 'Direction de l''Audit Interne'),
-('RANDRIA', 'Paul', 'MAT003', 'Superviseur', 'Direction de l''Audit Interne'),
-('RAZAFINDRAKOTO', 'Luc', 'MAT004', 'Auditeur interne', 'Direction de l''Audit Interne'),
-('ANDRIAMBOLOLONA', 'Sophie', 'MAT005', 'Directeur de l''Audit Interne', 'Direction de l''Audit Interne'),
-('RAKOTOARISOA', 'Nadia', 'MAT006', 'Chef de mission', 'Direction de l''Audit Interne'),
-('RABEMANANA', 'Hery', 'MAT007', 'Superviseur', 'Direction de l''Audit Interne');
+('RAKOTO', 'Jean', 'MAT001', 'Chef de mission', 'Direction de l''Audit Interne', 'MASCULIN'),
+('RABE', 'Marie', 'MAT002', 'Auditeur interne', 'Direction de l''Audit Interne', 'FEMININ'),
+('RANDRIA', 'Paul', 'MAT003', 'Superviseur', 'Direction de l''Audit Interne', 'MASCULIN'),
+('RAZAFINDRAKOTO', 'Luc', 'MAT004', 'Auditeur interne', 'Direction de l''Audit Interne', 'MASCULIN'),
+('ANDRIAMBOLOLONA', 'Sophie', 'MAT005', 'Directeur de l''Audit Interne', 'Direction de l''Audit Interne', 'FEMININ'),
+('RAKOTOARISOA', 'Nadia', 'MAT006', 'Chef de mission', 'Direction de l''Audit Interne', 'FEMININ'),
+('RABEMANANA', 'Hery', 'MAT007', 'Superviseur', 'Direction de l''Audit Interne', 'MASCULIN');

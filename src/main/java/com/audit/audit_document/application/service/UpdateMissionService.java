@@ -140,6 +140,10 @@ public class UpdateMissionService implements UpdateMissionUseCase {
                     missionPersonne.getPersonne().getServices()
             );
 
+            personneResponse.setSexe(
+                    missionPersonne.getPersonne().getSexe()
+            );
+
             personneResponse.setRoles(
                     missionPersonne.getRoles()
             );

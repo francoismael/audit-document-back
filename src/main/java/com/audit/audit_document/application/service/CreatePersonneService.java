@@ -28,6 +28,12 @@ public class CreatePersonneService implements CreatePersonneUseCase {
         personne.setFonction(trimToNull(request.getFonction()));
         personne.setServices(trimToNull(request.getServices()));
 
+        if (request.getSexe() == null) {
+            throw new IllegalArgumentException("Le sexe de la personne est obligatoire.");
+        }
+
+        personne.setSexe(request.getSexe());
+
         return personneRepository.save(personne);
     }
 

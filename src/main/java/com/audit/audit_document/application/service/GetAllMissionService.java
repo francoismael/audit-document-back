@@ -108,6 +108,10 @@ public class GetAllMissionService implements GetAllMissionUseCase {
                         missionPersonne.getPersonne().getServices()
                 );
 
+                personneResponse.setSexe(
+                        missionPersonne.getPersonne().getSexe()
+                );
+
                 personneResponse.setRoles(
                         missionPersonne.getRoles()
                 );

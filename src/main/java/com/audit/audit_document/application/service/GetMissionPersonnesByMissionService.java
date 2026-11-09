@@ -91,6 +91,10 @@ public class GetMissionPersonnesByMissionService
                                 .getPersonne()
                                 .getServices()
                 );
+
+                response.setSexe(
+                        missionPersonne.getPersonne().getSexe()
+                );
             }
 
             /*

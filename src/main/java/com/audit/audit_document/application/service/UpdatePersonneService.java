@@ -33,6 +33,12 @@ public class UpdatePersonneService implements UpdatePersonneUseCase {
         personne.setFonction(request.getFonction());
         personne.setServices(request.getServices());
 
+        if (request.getSexe() == null) {
+            throw new IllegalArgumentException("Le sexe de la personne est obligatoire.");
+        }
+
+        personne.setSexe(request.getSexe());
+
         return personneRepository.save(personne);
     }
 }
